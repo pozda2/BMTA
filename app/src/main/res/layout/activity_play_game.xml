@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.PlayGame">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".controller.PlayGame"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <ImageView
+            android:id="@+id/imageWest"
+            android:layout_width="87dp"
+            android:layout_height="81dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageCenter"
+            app:layout_constraintEnd_toStartOf="@+id/imageCenter"
+            app:layout_constraintTop_toTopOf="@+id/imageCenter"
+            app:srcCompat="@drawable/ic_meadow" />
+
+        <ImageView
+            android:id="@+id/imageSouth"
+            android:layout_width="87dp"
+            android:layout_height="81dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/imageCenter"
+            app:layout_constraintStart_toStartOf="@+id/imageCenter"
+            app:layout_constraintTop_toBottomOf="@+id/imageCenter"
+            app:srcCompat="@drawable/ic_border" />
+
+        <ImageView
+            android:id="@+id/imageEast"
+            android:layout_width="87dp"
+            android:layout_height="81dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageCenter"
+            app:layout_constraintStart_toEndOf="@+id/imageCenter"
+            app:layout_constraintTop_toTopOf="@+id/imageCenter"
+            app:srcCompat="@drawable/ic_bridge" />
+
+        <TextView
+            android:id="@+id/textKills"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/imageKills"
+            app:layout_constraintStart_toStartOf="@+id/imageKills"
+            app:layout_constraintTop_toBottomOf="@+id/imageKills" />
+
+        <TextView
+            android:id="@+id/textHealing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/imageHealing"
+            app:layout_constraintStart_toStartOf="@+id/imageHealing"
+            app:layout_constraintTop_toBottomOf="@+id/imageHealing" />
+
+        <TextView
+            android:id="@+id/textLearning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/imageLearning"
+            app:layout_constraintStart_toStartOf="@+id/imageLearning"
+            app:layout_constraintTop_toBottomOf="@+id/imageLearning" />
+
+        <TextView
+            android:id="@+id/textDefense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/imageDefense"
+            app:layout_constraintStart_toStartOf="@+id/imageDefense"
+            app:layout_constraintTop_toBottomOf="@+id/imageDefense" />
+
+        <ImageView
+            android:id="@+id/imageKills"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageHealing"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_rip" />
+
+        <TextView
+            android:id="@+id/textHeroName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/textHeroName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textHeroName"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/imageHealth"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageAttack"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:srcCompat="@drawable/ic_hearth" />
+
+        <TextView
+            android:id="@+id/textAttack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/imageAttack"
+            app:layout_constraintStart_toStartOf="@+id/imageAttack"
+            app:layout_constraintTop_toBottomOf="@+id/imageAttack" />
+
+        <TextView
+            android:id="@+id/textHealth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/imageHealth"
+            app:layout_constraintStart_toStartOf="@+id/imageHealth"
+            app:layout_constraintTop_toBottomOf="@+id/imageHealth" />
+
+        <ImageView
+            android:id="@+id/imageCenter"
+            android:layout_width="99dp"
+            android:layout_height="99dp"
+            android:cropToPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_knight" />
+
+        <ImageView
+            android:id="@+id/imageLearning"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            app:layout_constraintEnd_toStartOf="@+id/imageHealing"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageDefense"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_book" />
+
+        <ImageView
+            android:id="@+id/imageAttack"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/imageDefense"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageHealth"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_sword" />
+
+        <ImageView
+            android:id="@+id/imageDefense"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/imageLearning"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageAttack"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_shield" />
+
+        <ImageView
+            android:id="@+id/imageHealing"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toStartOf="@+id/imageKills"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageLearning"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_medical" />
+
+        <ImageView
+            android:id="@+id/imageNorth"
+            android:layout_width="87dp"
+            android:layout_height="81dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageCenter"
+            app:layout_constraintEnd_toEndOf="@+id/imageCenter"
+            app:layout_constraintStart_toStartOf="@+id/imageCenter"
+            app:srcCompat="@drawable/ic_forest" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

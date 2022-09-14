@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BMTA</string>
+    <string name="newGame">Nová hra</string>
+    <string name="endGame">Konec</string>
+    <string name="results">Výsledky</string>
+    <string name="heroName">Jméno hrdiny</string>
+    <string name="startGame">Začít hrát</string>
+</resources>
