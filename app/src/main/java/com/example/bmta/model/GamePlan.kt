@@ -1,6 +1,5 @@
 package com.example.bmta.model
 
-import java.lang.StringBuilder
 import kotlin.random.Random
 
 data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
@@ -33,10 +32,18 @@ data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
         for (f in 1 .. numForrest) {
             val forrestPossition = generateRandomPositionOnMeadow()
             gamePlan[forrestPossition.y][forrestPossition.x].terrain = Terrain.FOREST
-            if (gamePlan[forrestPossition.y-1][forrestPossition.x].terrain == Terrain.MEADOW) { gamePlan[forrestPossition.y-1][forrestPossition.x].terrain = Terrain.FOREST}
-            if (gamePlan[forrestPossition.y+1][forrestPossition.x].terrain == Terrain.MEADOW) { gamePlan[forrestPossition.y+1][forrestPossition.x].terrain = Terrain.FOREST}
-            if (gamePlan[forrestPossition.y][forrestPossition.x-1].terrain == Terrain.MEADOW) { gamePlan[forrestPossition.y][forrestPossition.x-1].terrain = Terrain.FOREST}
-            if (gamePlan[forrestPossition.y][forrestPossition.x+1].terrain == Terrain.MEADOW) { gamePlan[forrestPossition.y][forrestPossition.x+1].terrain = Terrain.FOREST}
+            if (gamePlan[forrestPossition.y-1][forrestPossition.x].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPossition.y-1][forrestPossition.x].terrain = Terrain.FOREST
+            }
+            if (gamePlan[forrestPossition.y+1][forrestPossition.x].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPossition.y+1][forrestPossition.x].terrain = Terrain.FOREST
+            }
+            if (gamePlan[forrestPossition.y][forrestPossition.x-1].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPossition.y][forrestPossition.x-1].terrain = Terrain.FOREST
+            }
+            if (gamePlan[forrestPossition.y][forrestPossition.x+1].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPossition.y][forrestPossition.x+1].terrain = Terrain.FOREST
+            }
         }
     }
 
@@ -60,25 +67,16 @@ data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
         return randomPosition
     }
 
-    fun generateFreeRandomPositionOnMeadow(characters: ArrayList<Any>) : Position {
+    fun generateFreeRandomPositionOnMeadow(gameObjects: ArrayList<Any>) : Position {
         var randomPosition : Position
         do {
             randomPosition = generateRandomPositionOnMeadow()
-        } while (! randomPosition.isFree(characters) )
+        } while (! randomPosition.isFree(gameObjects) )
         return randomPosition
     }
 
     fun getTerrainOnGameField (position: Position) : Terrain {
         return gamePlan[position.y][position.x].terrain
-    }
-
-    fun getSurroundingDescription (position : Position) : String {
-        val description = StringBuilder ("")
-        description.append ("Na severu je "+gamePlan[position.y-1][position.x].terrain.description+". ")
-        description.append ("Na východu je "+gamePlan[position.y][position.x + 1 ].terrain.description + ". ")
-        description.append ("Na jihu je "+ gamePlan[position.y +1 ][position.x ].terrain.description + ". ")
-        description.append ("Na západu je "+gamePlan[position.y ][position.x -1].terrain.description + ".")
-        return description.toString()
     }
 
     fun map() {
@@ -103,21 +101,26 @@ data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
         }
     }
 
-    fun map(characters: ArrayList<Any>) {
+    fun map(gameObjects: ArrayList<Any>) {
         var printedObject : Boolean
         for (i in 0 until height) {
             for (j in 0 until width) {
                 printedObject=false
-                for (character in characters) {
-                    if (character is Character) {
-                        if (character.position == Position(j, i)) {
-                            if (character is Hero) {
+                for (gameObject in gameObjects) {
+                    if (gameObject is GameObject) {
+                        if (gameObject.position == Position(j, i)) {
+                            if (gameObject is Hero) {
                                 print ("H ")
                                 printedObject = true
-                            }
-                            else if (character is Enemy && ! character.isDeath()) {
+                                break
+                            }  else if (gameObject is Enemy && ! gameObject.isDeath()) {
                                 print ("N ")
                                 printedObject = true
+                                break
+                            }  else if (gameObject is Item && ! gameObject.pickedUp) {
+                                print ("P ")
+                                printedObject = true
+                                break
                             }
                         }
                     }

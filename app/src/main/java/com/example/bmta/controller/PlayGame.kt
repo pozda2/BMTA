@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.bmta.R
 import com.example.bmta.databinding.ActivityPlayGameBinding
 import com.example.bmta.model.*
+import com.example.bmta.model.Item
 
 class PlayGame : AppCompatActivity() {
     private lateinit var binding : ActivityPlayGameBinding
@@ -34,10 +35,7 @@ class PlayGame : AppCompatActivity() {
         }
 
         binding.imageCenter.setOnClickListener {
-            val enemy = Newgame.game.getEnemyOnGameField(Newgame.game.hero.position, Newgame.game.enemies)
-            if (enemy is Enemy && ! enemy.isDeath()) {
-                runRound(Direction.NOMOVE)
-            }
+            runRound(Direction.NOMOVE)
         }
 
         refreshStats()
@@ -46,22 +44,30 @@ class PlayGame : AppCompatActivity() {
 
     private fun runRound (direction: Direction) {
         var message : String
-        var gameObject : GameObject = GameObject.NONE
+        var command = "nop"
         if (direction == Direction.NOMOVE) {
             val enemy = Newgame.game.getEnemyOnGameField(Newgame.game.hero.position, Newgame.game.enemies)
+            val item = Newgame.game.getItemOnGameField (Newgame.game.hero.position, Newgame.game.items)
             if (enemy is Enemy && ! enemy.isDeath()) {
-                gameObject = GameObject.SKELETON
+                command = enemy.command
                 Newgame.game.enemy=enemy
+            } else if (item is Item && ! item.pickedUp)  {
+                Newgame.game.item = item
+                command=item.command
+            } else {
+                command = "nop"
             }
         } else {
-            gameObject = getTerrainOnGameField(
+            command = Newgame.game.gamePlan.getTerrainOnGameField(
                 Position(
                     Newgame.game.hero.position.x + direction.relativeX,
                     Newgame.game.hero.position.y + direction.relativeY
                 )
-            )
+            ).command
+            if (command.isEmpty() || command == "kacej")
+                command += direction.command
         }
-        val command = translateGameObjectToCommand(gameObject, direction)
+
         if (command =="nop") {
             Toast.makeText(this, "Neplatný příkaz", Toast.LENGTH_SHORT).show()
             return
@@ -108,39 +114,36 @@ class PlayGame : AppCompatActivity() {
         refreshGameFields()
     }
 
-    private fun translateGameObjectToCommand (gameObject: GameObject, direction:Direction) : String {
-        return when (gameObject) {
-            GameObject.MEADOW, GameObject.BRIDGE -> direction.command
-            GameObject.FOREST -> GameObject.FOREST.command+direction.command
-            GameObject.TROLL -> GameObject.TROLL.command
-            GameObject.SKELETON -> GameObject.SKELETON.command
-            else -> "nop"
-        }
-    }
-
-    private fun getTerrainOnGameField (position: Position) : GameObject {
-        return when (Newgame.game.gamePlan.getTerrainOnGameField(position)) {
-            Terrain.BORDER -> GameObject.BORDER
-            Terrain.MEADOW -> GameObject.MEADOW
-            Terrain.RIVER -> GameObject.RIVER
-            Terrain.BRIDGE -> GameObject.BRIDGE
-            Terrain.FOREST -> GameObject.FOREST
-        }
-    }
-
     private fun refreshGameFields() {
-        binding.imageNorth.setImageResource(getTerrainOnGameField(Position(Newgame.game.hero.position.x + Direction.NORTH.relativeX, Newgame.game.hero.position.y + Direction.NORTH.relativeY)).imgResource)
-        binding.imageSouth.setImageResource(getTerrainOnGameField(Position(Newgame.game.hero.position.x + Direction.SOUTH.relativeX, Newgame.game.hero.position.y + Direction.SOUTH.relativeY)).imgResource)
-        binding.imageWest.setImageResource(getTerrainOnGameField(Position(Newgame.game.hero.position.x + Direction.WEST.relativeX, Newgame.game.hero.position.y + Direction.WEST.relativeY)).imgResource)
-        binding.imageEast.setImageResource(getTerrainOnGameField(Position(Newgame.game.hero.position.x + Direction.EAST.relativeX, Newgame.game.hero.position.y + Direction.EAST.relativeY)).imgResource)
+        binding.imageNorth.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.NORTH.relativeX,
+                     Newgame.game.hero.position.y + Direction.NORTH.relativeY)
+        ).imgResource)
+        binding.imageSouth.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.SOUTH.relativeX,
+                     Newgame.game.hero.position.y + Direction.SOUTH.relativeY)
+        ).imgResource)
+        binding.imageWest.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.WEST.relativeX,
+                     Newgame.game.hero.position.y + Direction.WEST.relativeY)
+        ).imgResource)
+        binding.imageEast.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.EAST.relativeX,
+                     Newgame.game.hero.position.y + Direction.EAST.relativeY)
+        ).imgResource)
 
         val enemy = Newgame.game.getEnemyOnGameField(Newgame.game.hero.position, Newgame.game.enemies)
-        if (enemy == null) {
-            binding.imageCenter.setImageResource(getTerrainOnGameField(Newgame.game.hero.position).imgResource)
-        } else {
+        val item = Newgame.game.getItemOnGameField(Newgame.game.hero.position, Newgame.game.items)
+
+        if (enemy is Enemy) {
             if (enemy.isDeath()) binding.imageCenter.setImageResource(R.drawable.ic_rip)
-            else if (enemy is Skeleton) binding.imageCenter.setImageResource(R.drawable.ic_skeleton)
-            else if (enemy is Troll) binding.imageCenter.setImageResource(R.drawable.ic_troll)
+            else if (enemy.name == "Skeleton") binding.imageCenter.setImageResource(R.drawable.ic_skeleton)
+            else if (enemy.name == "Troll") binding.imageCenter.setImageResource(R.drawable.ic_troll)
+        } else if (item is Item && ! item.pickedUp) {
+            binding.imageCenter.setImageResource(item.imgResource)
+        } else {
+            binding.imageCenter.setImageResource(
+                Newgame.game.gamePlan.getTerrainOnGameField(Newgame.game.hero.position).imgResource)
         }
     }
 
@@ -150,7 +153,6 @@ class PlayGame : AppCompatActivity() {
         binding.textHealth.text= "%.2f".format(Newgame.game.hero.health)
         binding.textAttack.text= "%.2f".format(Newgame.game.hero.attack)
         binding.textDefense.text= "%.2f".format(Newgame.game.hero.defense)
-        binding.textLearning.text= "%.2f".format(Newgame.game.hero.learning)
         binding.textHealing.text= "%.2f".format(Newgame.game.hero.healing)
         binding.textKills.text = Newgame.game.hero.kills.toString()
     }

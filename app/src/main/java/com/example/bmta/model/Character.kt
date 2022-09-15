@@ -1,8 +1,6 @@
 package com.example.bmta.model
 
-abstract class Character {
-    open lateinit var name: String
-    open lateinit var position: Position
+abstract class Character : GameObject() {
     open  var health: Float = 100f
         set(value) {
             field = if (value > 100) {
@@ -17,8 +15,6 @@ abstract class Character {
     fun isDeath (): Boolean {
         return (health < 0.00001)
     }
-    open fun increaseAttack() {}
-    open fun increaseDefense() {}
 
     open fun attack (enemy: Character) : String {
         var realAttack = attack - enemy.defense
@@ -27,7 +23,6 @@ abstract class Character {
         enemy.health = enemy.health - realAttack
         if (enemy.isDeath()) return "${enemy.name} je mrtvý."
 
-        enemy.increaseDefense()
         return "$name zaútočil silou " + "%.2f".format(realAttack) +"."
     }
 }

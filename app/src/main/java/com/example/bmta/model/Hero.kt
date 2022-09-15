@@ -4,13 +4,39 @@ import java.util.*
 
 data class Hero(
     override var name: String = "Hrdina",
-    override var position: Position
-) :
+    override var position: Position,
+    override var command: String = "",
+    override var imgResource: Int
+    ) : Character() {
 
- Character() {
+
+    override var attack : Float = 1.2f
+        get() {
+            var a = field
+            for (item in this.items) {
+                if (item is Item) a += item.attack
+            }
+            return a
+        }
+    override var defense : Float = 1.2f
+        get() {
+            var a = field
+            for (item in this.items) {
+                if (item is Item) a += item.defense
+            }
+            return a
+        }
     var healing: Float = 0.5F
-    var learning: Float = 0.02F
+        get() {
+            var a = field
+            for (item in this.items) {
+                if (item is Item) a += item.healing
+            }
+            return a
+        }
+
     var kills: Int =0
+    var items = arrayListOf<Any>()
 
     override fun toString(): String {
         val description = StringBuilder("")
@@ -21,8 +47,12 @@ data class Hero(
         description.append("Útok:        "+ "%.2f".format(attack) + "\n")
         description.append("Obrana:      "+ "%.2f".format(defense) + "\n")
         description.append("Uzdravování: "+ "%.2f".format(healing) + "\n")
-        description.append("Učení:       "+ "%.2f".format(learning) + "\n")
         description.append("Zabití:      $kills \n")
+        description.append("Předměty:    ")
+        for (item in items) {
+            if (item is Item && ! item.used) description.append("${item.name}, ")
+        }
+        description.append("\n")
         return description.toString()
     }
 
@@ -42,17 +72,8 @@ data class Hero(
         position.x = position.x - 1
     }
 
-    override fun increaseAttack() {
-        attack += learning
-    }
-
-    override fun increaseDefense() {
-        defense += learning
-    }
-
     override fun attack(enemy: Character): String {
         val result = super.attack(enemy)
-        if (! isDeath()) increaseAttack()
         if (enemy.isDeath()) kills+=1
         return result
     }
@@ -67,6 +88,11 @@ data class Hero(
             "zapad" -> x -= 1
         }
         gamePlan.getGameField(Position (x, y)).terrain = Terrain.MEADOW
+    }
+
+    fun addItem (item: Item) {
+        items.add(item)
+        item.pickedUp=true
     }
 
 }

@@ -25,3 +25,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+// recycle view
+// database
+// json soubory
+// MVVM
+// jetpack compose
