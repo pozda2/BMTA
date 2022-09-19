@@ -115,7 +115,7 @@ class Game (val heroName:String) {
         )
         items.add(item)
         gameObjects.add(item)
-        Item(
+        item=Item(
             name= "brneni",
             position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
             pickedUp = false,
@@ -262,14 +262,10 @@ class Game (val heroName:String) {
             "zapad" -> hero.goWest()
             "vychod" ->  hero.goEast()
             "utok" -> return (hero.attack(enemy!!))
-            "kacejsever" ->
-                hero.cutDown("sever", gamePlan)
-            "kacejjih" ->
-                hero.cutDown("jih", gamePlan)
-            "kacejzapad" ->
-                hero.cutDown("zapad", gamePlan)
-            "kacejvychod" ->
-                hero.cutDown("vychod", gamePlan)
+            "kacejsever" -> hero.cutDown("sever", gamePlan)
+            "kacejjih" -> hero.cutDown("jih", gamePlan)
+            "kacejzapad" -> hero.cutDown("zapad", gamePlan)
+            "kacejvychod" -> hero.cutDown("vychod", gamePlan)
             else -> {
                 if (item is Item && item!!.name.uppercase() == command.uppercase()) {
                     item!!.useItem(hero)
