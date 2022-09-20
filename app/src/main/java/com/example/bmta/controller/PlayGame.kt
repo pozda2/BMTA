@@ -1,17 +1,23 @@
 package com.example.bmta.controller
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bmta.R
 import com.example.bmta.databinding.ActivityPlayGameBinding
 import com.example.bmta.model.*
 import com.example.bmta.model.Item
+import com.example.bmta.view.LogAdapter
+import java.util.*
 
 class PlayGame : AppCompatActivity() {
     private lateinit var binding : ActivityPlayGameBinding
+
+    private val logs = LinkedList(listOf(""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +44,14 @@ class PlayGame : AppCompatActivity() {
             runRound(Direction.NOMOVE)
         }
 
+        binding.logRecycler.layoutManager = LinearLayoutManager(this)
+        binding.logRecycler.adapter = LogAdapter(logs)
+
         refreshStats()
         refreshGameFields()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun runRound (direction: Direction) {
         var message : String
         var command = "nop"
@@ -74,12 +84,17 @@ class PlayGame : AppCompatActivity() {
         } else {
             message = Newgame.game.runCommand(command)
             if (message.isNotEmpty()) {
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                logs.push (message)
+                binding.logRecycler.adapter?.notifyDataSetChanged()
             }
         }
 
         message=Newgame.game.enemyAttack()
-        if (message.isNotEmpty()) Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        if (message.isNotEmpty()) {
+            // Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            logs.push (message)
+        }
 
         Newgame.game.score++
 
