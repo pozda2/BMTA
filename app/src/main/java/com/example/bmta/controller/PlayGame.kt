@@ -133,36 +133,41 @@ class PlayGame : AppCompatActivity() {
     }
 
     private fun refreshGameFields() {
-        binding.imageNorth.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+        binding.imageNorth.setImageResource(getImageResourceOnGameField (
             Position(Newgame.game.hero.position.x + Direction.NORTH.relativeX,
                      Newgame.game.hero.position.y + Direction.NORTH.relativeY)
-        ).imgResource)
-        binding.imageSouth.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+        ))
+        binding.imageSouth.setImageResource(getImageResourceOnGameField(
             Position(Newgame.game.hero.position.x + Direction.SOUTH.relativeX,
                      Newgame.game.hero.position.y + Direction.SOUTH.relativeY)
-        ).imgResource)
-        binding.imageWest.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+        ))
+        binding.imageWest.setImageResource(getImageResourceOnGameField(
             Position(Newgame.game.hero.position.x + Direction.WEST.relativeX,
                      Newgame.game.hero.position.y + Direction.WEST.relativeY)
-        ).imgResource)
-        binding.imageEast.setImageResource(Newgame.game.gamePlan.getTerrainOnGameField(
+        ))
+        binding.imageEast.setImageResource(getImageResourceOnGameField(
             Position(Newgame.game.hero.position.x + Direction.EAST.relativeX,
                      Newgame.game.hero.position.y + Direction.EAST.relativeY)
-        ).imgResource)
+        ))
+        binding.imageCenter.setImageResource(getImageResourceOnGameField(
+            Position(Newgame.game.hero.position.x,
+                Newgame.game.hero.position.y)
+        ))
+    }
 
-        val enemy = Newgame.game.getEnemyOnGameField(Newgame.game.hero.position, Newgame.game.enemies)
-        val item = Newgame.game.getItemOnGameField(Newgame.game.hero.position, Newgame.game.items)
+    private fun getImageResourceOnGameField (position: Position) : Int {
+        val enemy = Newgame.game.getEnemyOnGameField(position, Newgame.game.enemies)
+        val item = Newgame.game.getItemOnGameField(position, Newgame.game.items)
 
         if (enemy is Enemy) {
-            if (enemy.isDeath()) binding.imageCenter.setImageResource(R.drawable.ic_rip)
-            else if (enemy.name == "Skeleton") binding.imageCenter.setImageResource(R.drawable.ic_skeleton)
-            else if (enemy.name == "Troll") binding.imageCenter.setImageResource(R.drawable.ic_troll)
+            if (enemy.isDeath()) return R.drawable.ic_rip
+            else if (enemy.name == "Skeleton") return R.drawable.ic_skeleton
+            else if (enemy.name == "Troll") return R.drawable.ic_troll
         } else if (item is Item && ! item.pickedUp) {
-            binding.imageCenter.setImageResource(item.imgResource)
-        } else {
-            binding.imageCenter.setImageResource(
-                Newgame.game.gamePlan.getTerrainOnGameField(Newgame.game.hero.position).imgResource)
+            return item.imgResource
         }
+
+        return Newgame.game.gamePlan.getTerrainOnGameField(position).imgResource
     }
 
     private fun refreshStats () {
