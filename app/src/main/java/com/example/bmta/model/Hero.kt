@@ -57,19 +57,39 @@ data class Hero(
     }
 
     fun goNorth() {
-        position.y = position.y - 1
+        position.y -= 1
     }
 
     fun goSouth() {
-        position.y = position.y + 1
+        position.y += 1
     }
 
     fun goEast() {
-        position.x = position.x + 1
+        position.x += 1
     }
 
     fun goWest() {
-        position.x = position.x - 1
+        position.x -= 1
+    }
+
+    fun goNorthEast () {
+        position.y -=1
+        position.x +=1
+    }
+
+    fun goNorthWest (){
+        position.y -=1
+        position.x -=1
+    }
+
+    fun goSouthEast () {
+        position.y +=1
+        position.x +=1
+    }
+
+    fun goSouthWest (){
+        position.y +=1
+        position.x -=1
     }
 
     override fun attack(enemy: Character): String {
@@ -78,15 +98,9 @@ data class Hero(
         return result
     }
 
-    fun cutDown(direction: String, gamePlan: GamePlan) {
-        var x: Int = position.x
-        var y: Int = position.y
-        when (direction.lowercase(Locale.getDefault())) {
-            "sever" -> y -= 1
-            "jih" -> y += 1
-            "vychod" -> x += 1
-            "zapad" -> x -= 1
-        }
+    fun cutDown(direction: Direction, gamePlan: GamePlan) {
+        var x: Int = position.x + direction.relativeX
+        var y: Int = position.y + direction.relativeY
         gamePlan.getGameField(Position (x, y)).terrain = Terrain.MEADOW
     }
 
@@ -94,5 +108,4 @@ data class Hero(
         items.add(item)
         item.pickedUp=true
     }
-
 }

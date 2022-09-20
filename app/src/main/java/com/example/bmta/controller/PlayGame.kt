@@ -28,16 +28,32 @@ class PlayGame : AppCompatActivity() {
             runRound(Direction.NORTH)
         }
 
+        binding.imageNorthEast.setOnClickListener {
+            runRound(Direction.NORTHEAST)
+        }
+
+        binding.imageEast.setOnClickListener {
+            runRound(Direction.EAST)
+        }
+
+        binding.imageSouthEast.setOnClickListener {
+            runRound(Direction.SOUTHEAST)
+        }
+
         binding.imageSouth.setOnClickListener {
             runRound(Direction.SOUTH)
+        }
+
+        binding.imageSouthWest.setOnClickListener {
+            runRound(Direction.SOUTHWEST)
         }
 
         binding.imageWest.setOnClickListener {
             runRound(Direction.WEST)
         }
 
-        binding.imageEast.setOnClickListener {
-            runRound(Direction.EAST)
+        binding.imageNorthWest.setOnClickListener {
+            runRound(Direction.NORTHWEST)
         }
 
         binding.imageCenter.setOnClickListener {
@@ -137,18 +153,41 @@ class PlayGame : AppCompatActivity() {
             Position(Newgame.game.hero.position.x + Direction.NORTH.relativeX,
                      Newgame.game.hero.position.y + Direction.NORTH.relativeY)
         ))
+
+        binding.imageNorthEast.setImageResource(getImageResourceOnGameField (
+            Position(Newgame.game.hero.position.x + Direction.NORTHEAST.relativeX,
+                Newgame.game.hero.position.y + Direction.NORTHEAST.relativeY)
+        ))
+
+        binding.imageEast.setImageResource(getImageResourceOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.EAST.relativeX,
+                Newgame.game.hero.position.y + Direction.EAST.relativeY)
+        ))
+
+        binding.imageSouthEast.setImageResource(getImageResourceOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.SOUTHEAST.relativeX,
+                Newgame.game.hero.position.y + Direction.SOUTHEAST.relativeY)
+        ))
+
         binding.imageSouth.setImageResource(getImageResourceOnGameField(
             Position(Newgame.game.hero.position.x + Direction.SOUTH.relativeX,
                      Newgame.game.hero.position.y + Direction.SOUTH.relativeY)
         ))
+
+        binding.imageSouthWest.setImageResource(getImageResourceOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.SOUTHWEST.relativeX,
+                Newgame.game.hero.position.y + Direction.SOUTHWEST.relativeY)
+        ))
+
         binding.imageWest.setImageResource(getImageResourceOnGameField(
             Position(Newgame.game.hero.position.x + Direction.WEST.relativeX,
                      Newgame.game.hero.position.y + Direction.WEST.relativeY)
         ))
-        binding.imageEast.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x + Direction.EAST.relativeX,
-                     Newgame.game.hero.position.y + Direction.EAST.relativeY)
+        binding.imageNorthWest.setImageResource(getImageResourceOnGameField(
+            Position(Newgame.game.hero.position.x + Direction.NORTHWEST.relativeX,
+                Newgame.game.hero.position.y + Direction.NORTHWEST.relativeY)
         ))
+
         binding.imageCenter.setImageResource(getImageResourceOnGameField(
             Position(Newgame.game.hero.position.x,
                 Newgame.game.hero.position.y)

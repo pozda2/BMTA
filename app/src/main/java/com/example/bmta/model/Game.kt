@@ -205,15 +205,72 @@ class Game (val heroName:String) {
         if (enemy is Enemy && ! enemy!!.isDeath()) possibleCommands.add("utok")
         if (item is Item && ! item!!.pickedUp) possibleCommands.add(item!!.name)
 
-        if (gamePlan.getGameField(Position (hero.position.x, hero.position.y-1)).isWalkable()) possibleCommands.add("sever")
-        if (gamePlan.getGameField(Position (hero.position.x, hero.position.y + 1)).isWalkable()) possibleCommands.add("jih")
-        if (gamePlan.getGameField(Position (hero.position.x + 1, hero.position.y )).isWalkable()) possibleCommands.add("vychod")
-        if (gamePlan.getGameField(Position (hero.position.x -1, hero.position.y )).isWalkable())  possibleCommands.add("zapad")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.NORTH.relativeX,
+                          hero.position.y + Direction.NORTH.relativeY))
+                .isWalkable()) possibleCommands.add("sever")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.SOUTH.relativeX,
+                          hero.position.y + Direction.SOUTH.relativeY))
+                .isWalkable()) possibleCommands.add("jih")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.EAST.relativeX,
+                          hero.position.y + Direction.EAST.relativeY))
+                .isWalkable()) possibleCommands.add("vychod")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.WEST.relativeX,
+                          hero.position.y + Direction.WEST.relativeY))
+                .isWalkable())  possibleCommands.add("zapad")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.NORTHEAST.relativeX,
+                          hero.position.y + Direction.NORTHEAST.relativeY,))
+                .isWalkable()) possibleCommands.add("severovychod")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.SOUTHEAST.relativeX,
+                          hero.position.y + Direction.SOUTHEAST.relativeY))
+                .isWalkable()) possibleCommands.add("jihovychod")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.NORTHWEST.relativeX,
+                          hero.position.y + Direction.NORTHWEST.relativeY))
+                .isWalkable()) possibleCommands.add("severozapad")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.SOUTHWEST.relativeX,
+                          hero.position.y + Direction.SOUTHWEST.relativeY))
+                .isWalkable())  possibleCommands.add("jihozapad")
 
-        if (gamePlan.getGameField(Position (hero.position.x, hero.position.y-1)).terrain == Terrain.FOREST) possibleCommands.add("kacejsever")
-        if (gamePlan.getGameField(Position (hero.position.x, hero.position.y + 1)).terrain == Terrain.FOREST) possibleCommands.add("kacejjih")
-        if (gamePlan.getGameField(Position (hero.position.x + 1, hero.position.y )).terrain == Terrain.FOREST) possibleCommands.add("kacejvychod")
-        if (gamePlan.getGameField(Position (hero.position.x -1, hero.position.y )).terrain == Terrain.FOREST) possibleCommands.add("kacejzapad")
+
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.NORTH.relativeX,
+                    hero.position.y + Direction.NORTH.relativeY))
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejsever")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.SOUTH.relativeX,
+                    hero.position.y + Direction.SOUTH.relativeY))
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejjih")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.EAST.relativeX,
+                    hero.position.y + Direction.EAST.relativeY))
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejvychod")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.WEST.relativeX,
+                    hero.position.y + Direction.WEST.relativeY))
+                .terrain == Terrain.FOREST)  possibleCommands.add("kecejzapad")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.NORTHEAST.relativeX,
+                    hero.position.y + Direction.NORTHEAST.relativeY,))
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejseverovychod")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.SOUTHEAST.relativeX,
+                    hero.position.y + Direction.SOUTHEAST.relativeY))
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejjihovychod")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.NORTHWEST.relativeX,
+                    hero.position.y + Direction.NORTHWEST.relativeY))
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejseverozapad")
+        if (gamePlan.getGameField(
+                Position (hero.position.x + Direction.SOUTHWEST.relativeX,
+                    hero.position.y + Direction.SOUTHWEST.relativeY))
+                .terrain == Terrain.FOREST)  possibleCommands.add("kecejjihozapad")
 
         possibleCommands.add("stav")
         possibleCommands.add("mapa")
@@ -222,10 +279,31 @@ class Game (val heroName:String) {
 
     fun getSurroundingDescription () : String {
         val description = java.lang.StringBuilder("")
-        description.append ("Na severu je "+ gamePlan.getTerrainOnGameField(Position(hero.position.x + Direction.NORTH.relativeX, hero.position.y + Direction.NORTH.relativeY)).description+". ")
-        description.append ("Na východu je "+ gamePlan.getTerrainOnGameField(Position(hero.position.x + Direction.EAST.relativeX, hero.position.y + Direction.EAST.relativeY)).description+". ")
-        description.append ("Na jihu je "+ gamePlan.getTerrainOnGameField(Position(hero.position.x + Direction.SOUTH.relativeX, hero.position.y + Direction.SOUTH.relativeY)).description+". ")
-        description.append ("Na západu je "+ gamePlan.getTerrainOnGameField(Position(hero.position.x + Direction.WEST.relativeX, hero.position.y + Direction.WEST.relativeY)).description+".")
+        description.append ("Na severu je "+ gamePlan.getTerrainOnGameField(
+            Position(hero.position.x + Direction.NORTH.relativeX,
+                     hero.position.y + Direction.NORTH.relativeY)).description+". ")
+        description.append ("Na severovýchodu je "+ gamePlan.getTerrainOnGameField(
+            Position(hero.position.x + Direction.NORTHEAST.relativeX,
+                     hero.position.y + Direction.NORTHEAST.relativeY)).description+". ")
+        description.append ("Na východu je "+ gamePlan.getTerrainOnGameField(
+            Position(hero.position.x + Direction.EAST.relativeX,
+                     hero.position.y + Direction.EAST.relativeY)).description+". ")
+        description.append ("Na jihuvýchodu je "+ gamePlan.getTerrainOnGameField(
+            Position(hero.position.x + Direction.SOUTHEAST.relativeX,
+                     hero.position.y + Direction.SOUTHEAST.relativeY)).description+". ")
+        description.append ("Na jihu je "+ gamePlan.getTerrainOnGameField(
+            Position(hero.position.x + Direction.SOUTH.relativeX,
+                     hero.position.y + Direction.SOUTH.relativeY)).description+". ")
+        description.append ("Na jihozápadu je "+ gamePlan.getTerrainOnGameField(
+                Position(hero.position.x + Direction.SOUTHWEST.relativeX,
+                         hero.position.y + Direction.SOUTHWEST.relativeY)).description+".")
+        description.append ("Na západu je "+ gamePlan.getTerrainOnGameField(
+            Position(hero.position.x + Direction.WEST.relativeX,
+                     hero.position.y + Direction.WEST.relativeY)).description+".")
+        description.append ("Na severozápadu je "+ gamePlan.getTerrainOnGameField(
+            Position(hero.position.x + Direction.NORTHWEST.relativeX,
+                     hero.position.y + Direction.NORTHWEST.relativeY)).description+".")
+
         if (item != null && ! item!!.pickedUp) description.append("\nNa zemi vidíš ${item!!.name}.")
         if (enemy != null && ! enemy!!.isDeath()) description.append("\nPozor ${enemy!!.name}.")
         if (enemy != null && enemy!!.isDeath()) description.append("\nNa zemi vidíš mrtvolu ${enemy!!.name}.")
@@ -257,15 +335,26 @@ class Game (val heroName:String) {
         when (command) {
             "stav" -> return (hero.toString())
             "mapa" -> gamePlan.map(gameObjects)
-            "sever" ->  hero.goNorth()
-            "jih" -> hero.goSouth()
-            "zapad" -> hero.goWest()
-            "vychod" ->  hero.goEast()
+
+            "s" ->  hero.goNorth()
+            "sv" -> hero.goNorthEast()
+            "v" ->  hero.goEast()
+            "jv" -> hero.goSouthEast()
+            "j" -> hero.goSouth()
+            "jz" -> hero.goSouthWest()
+            "z" -> hero.goWest()
+            "sz" -> hero.goNorthWest()
+
+            "kacejs" -> hero.cutDown(Direction.NORTH, gamePlan)
+            "kacejsv" -> hero.cutDown(Direction.NORTHEAST, gamePlan)
+            "kacejv" -> hero.cutDown(Direction.EAST, gamePlan)
+            "kacejjv" -> hero.cutDown(Direction.SOUTHEAST, gamePlan)
+            "kacejj" -> hero.cutDown(Direction.SOUTH, gamePlan)
+            "kacejjz" -> hero.cutDown(Direction.SOUTHWEST, gamePlan)
+            "kacejz" -> hero.cutDown(Direction.WEST, gamePlan)
+            "kacejsz" -> hero.cutDown(Direction.NORTHWEST, gamePlan)
+
             "utok" -> return (hero.attack(enemy!!))
-            "kacejsever" -> hero.cutDown("sever", gamePlan)
-            "kacejjih" -> hero.cutDown("jih", gamePlan)
-            "kacejzapad" -> hero.cutDown("zapad", gamePlan)
-            "kacejvychod" -> hero.cutDown("vychod", gamePlan)
             else -> {
                 if (item is Item && item!!.name.uppercase() == command.uppercase()) {
                     item!!.useItem(hero)
