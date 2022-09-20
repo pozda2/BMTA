@@ -2,15 +2,15 @@ package com.example.bmta.controller
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bmta.R
 import com.example.bmta.databinding.ActivityPlayGameBinding
 import com.example.bmta.model.*
-import com.example.bmta.model.Item
+import com.example.bmta.view.ItemAdaper
 import com.example.bmta.view.LogAdapter
 import java.util.*
 
@@ -46,6 +46,8 @@ class PlayGame : AppCompatActivity() {
 
         binding.logRecycler.layoutManager = LinearLayoutManager(this)
         binding.logRecycler.adapter = LogAdapter(logs)
+        binding.itemsRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.itemsRecycler.adapter = ItemAdaper (Newgame.game.hero.items)
 
         refreshStats()
         refreshGameFields()
@@ -54,7 +56,7 @@ class PlayGame : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun runRound (direction: Direction) {
         var message : String
-        var command = "nop"
+        var command : String
         if (direction == Direction.NOMOVE) {
             val enemy = Newgame.game.getEnemyOnGameField(Newgame.game.hero.position, Newgame.game.enemies)
             val item = Newgame.game.getItemOnGameField (Newgame.game.hero.position, Newgame.game.items)
@@ -88,6 +90,7 @@ class PlayGame : AppCompatActivity() {
                 logs.push (message)
                 binding.logRecycler.adapter?.notifyDataSetChanged()
             }
+            binding.itemsRecycler.adapter?.notifyDataSetChanged()
         }
 
         message=Newgame.game.enemyAttack()
