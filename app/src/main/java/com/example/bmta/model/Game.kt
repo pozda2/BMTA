@@ -208,69 +208,69 @@ class Game (val heroName:String) {
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.NORTH.relativeX,
                           hero.position.y + Direction.NORTH.relativeY))
-                .isWalkable()) possibleCommands.add("sever")
+                .isWalkable()) possibleCommands.add("s")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.SOUTH.relativeX,
                           hero.position.y + Direction.SOUTH.relativeY))
-                .isWalkable()) possibleCommands.add("jih")
+                .isWalkable()) possibleCommands.add("j")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.EAST.relativeX,
                           hero.position.y + Direction.EAST.relativeY))
-                .isWalkable()) possibleCommands.add("vychod")
+                .isWalkable()) possibleCommands.add("v")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.WEST.relativeX,
                           hero.position.y + Direction.WEST.relativeY))
-                .isWalkable())  possibleCommands.add("zapad")
+                .isWalkable())  possibleCommands.add("z")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.NORTHEAST.relativeX,
                           hero.position.y + Direction.NORTHEAST.relativeY,))
-                .isWalkable()) possibleCommands.add("severovychod")
+                .isWalkable()) possibleCommands.add("sv")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.SOUTHEAST.relativeX,
                           hero.position.y + Direction.SOUTHEAST.relativeY))
-                .isWalkable()) possibleCommands.add("jihovychod")
+                .isWalkable()) possibleCommands.add("jv")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.NORTHWEST.relativeX,
                           hero.position.y + Direction.NORTHWEST.relativeY))
-                .isWalkable()) possibleCommands.add("severozapad")
+                .isWalkable()) possibleCommands.add("sz")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.SOUTHWEST.relativeX,
                           hero.position.y + Direction.SOUTHWEST.relativeY))
-                .isWalkable())  possibleCommands.add("jihozapad")
+                .isWalkable())  possibleCommands.add("jz")
 
 
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.NORTH.relativeX,
                     hero.position.y + Direction.NORTH.relativeY))
-                .terrain == Terrain.FOREST) possibleCommands.add("kecejsever")
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejs")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.SOUTH.relativeX,
                     hero.position.y + Direction.SOUTH.relativeY))
-                .terrain == Terrain.FOREST) possibleCommands.add("kecejjih")
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejj")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.EAST.relativeX,
                     hero.position.y + Direction.EAST.relativeY))
-                .terrain == Terrain.FOREST) possibleCommands.add("kecejvychod")
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejv")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.WEST.relativeX,
                     hero.position.y + Direction.WEST.relativeY))
-                .terrain == Terrain.FOREST)  possibleCommands.add("kecejzapad")
+                .terrain == Terrain.FOREST)  possibleCommands.add("kecejz")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.NORTHEAST.relativeX,
                     hero.position.y + Direction.NORTHEAST.relativeY,))
-                .terrain == Terrain.FOREST) possibleCommands.add("kecejseverovychod")
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejsv")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.SOUTHEAST.relativeX,
                     hero.position.y + Direction.SOUTHEAST.relativeY))
-                .terrain == Terrain.FOREST) possibleCommands.add("kecejjihovychod")
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejjv")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.NORTHWEST.relativeX,
                     hero.position.y + Direction.NORTHWEST.relativeY))
-                .terrain == Terrain.FOREST) possibleCommands.add("kecejseverozapad")
+                .terrain == Terrain.FOREST) possibleCommands.add("kecejsz")
         if (gamePlan.getGameField(
                 Position (hero.position.x + Direction.SOUTHWEST.relativeX,
                     hero.position.y + Direction.SOUTHWEST.relativeY))
-                .terrain == Terrain.FOREST)  possibleCommands.add("kecejjihozapad")
+                .terrain == Terrain.FOREST)  possibleCommands.add("kecejjz")
 
         possibleCommands.add("stav")
         possibleCommands.add("mapa")

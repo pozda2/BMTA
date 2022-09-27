@@ -30,19 +30,19 @@ data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
 
         // forests
         for (f in 1 .. numForrest) {
-            val forrestPossition = generateRandomPositionOnMeadow()
-            gamePlan[forrestPossition.y][forrestPossition.x].terrain = Terrain.FOREST
-            if (gamePlan[forrestPossition.y-1][forrestPossition.x].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPossition.y-1][forrestPossition.x].terrain = Terrain.FOREST
+            val forrestPosition = generateRandomPositionOnMeadow()
+            gamePlan[forrestPosition.y][forrestPosition.x].terrain = Terrain.FOREST
+            if (gamePlan[forrestPosition.y - 1][forrestPosition.x].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPosition.y - 1][forrestPosition.x].terrain = Terrain.FOREST
             }
-            if (gamePlan[forrestPossition.y+1][forrestPossition.x].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPossition.y+1][forrestPossition.x].terrain = Terrain.FOREST
+            if (gamePlan[forrestPosition.y + 1][forrestPosition.x].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPosition.y + 1][forrestPosition.x].terrain = Terrain.FOREST
             }
-            if (gamePlan[forrestPossition.y][forrestPossition.x-1].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPossition.y][forrestPossition.x-1].terrain = Terrain.FOREST
+            if (gamePlan[forrestPosition.y][forrestPosition.x - 1].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPosition.y][forrestPosition.x - 1].terrain = Terrain.FOREST
             }
-            if (gamePlan[forrestPossition.y][forrestPossition.x+1].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPossition.y][forrestPossition.x+1].terrain = Terrain.FOREST
+            if (gamePlan[forrestPosition.y][forrestPosition.x + 1].terrain == Terrain.MEADOW) {
+                gamePlan[forrestPosition.y][forrestPosition.x + 1].terrain = Terrain.FOREST
             }
         }
     }
