@@ -1,8 +1,8 @@
 package com.example.bmta.model
 
 abstract class GameObject {
-    open lateinit var name: String
-    open lateinit var position: Position
-    open lateinit var command: String
-    open var imgResource : Int = 0
+    abstract var name: String
+    abstract var position: Position
+    abstract var command: String
+    abstract var imgResource : Int
 }

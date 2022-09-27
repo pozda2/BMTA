@@ -13,30 +13,26 @@ data class Hero(
     override var attack : Float = 1.2f
         get() {
             var a = field
-            for (item in this.items) {
-                if (item is Item) a += item.attack
-            }
+            for (item in this.items) a += item.attack
+
             return a
         }
     override var defense : Float = 1.2f
         get() {
             var a = field
-            for (item in this.items) {
-                if (item is Item) a += item.defense
-            }
-            return a
-        }
-    var healing: Float = 0.5F
-        get() {
-            var a = field
-            for (item in this.items) {
-                if (item is Item) a += item.healing
-            }
+            for (item in this.items) a += item.defense
             return a
         }
 
-    var kills: Int =0
-    var items = arrayListOf<Any>()
+    var healing: Float = 0.5F
+        get() {
+            var a = field
+            for (item in this.items) a += item.healing
+            return a
+        }
+
+    var kills: Int = 0
+    var items = arrayListOf<Item>()
 
     override fun toString(): String {
         val description = StringBuilder("")
@@ -50,58 +46,30 @@ data class Hero(
         description.append("Zabití:      $kills \n")
         description.append("Předměty:    ")
         for (item in items) {
-            if (item is Item && ! item.used) description.append("${item.name}, ")
+            description.append("${item.name}, ")
         }
         description.append("\n")
+
         return description.toString()
     }
 
-    fun goNorth() {
-        position.y -= 1
-    }
-
-    fun goSouth() {
-        position.y += 1
-    }
-
-    fun goEast() {
-        position.x += 1
-    }
-
-    fun goWest() {
-        position.x -= 1
-    }
-
-    fun goNorthEast () {
-        position.y -=1
-        position.x +=1
-    }
-
-    fun goNorthWest (){
-        position.y -=1
-        position.x -=1
-    }
-
-    fun goSouthEast () {
-        position.y +=1
-        position.x +=1
-    }
-
-    fun goSouthWest (){
-        position.y +=1
-        position.x -=1
+    fun go (direction: Direction) : String {
+        position.x += direction.relativeX
+        position.y += direction.relativeY
+        return "Jdu na ${direction.description}"
     }
 
     override fun attack(enemy: Character): String {
         val result = super.attack(enemy)
-        if (enemy.isDeath()) kills+=1
+        if (enemy.isDeath()) kills += 1
         return result
     }
 
-    fun cutDown(direction: Direction, gamePlan: GamePlan) {
-        var x: Int = position.x + direction.relativeX
-        var y: Int = position.y + direction.relativeY
+    fun cutDown(direction: Direction, gamePlan: GamePlan) : String {
+        val x: Int = position.x + direction.relativeX
+        val y: Int = position.y + direction.relativeY
         gamePlan.getGameField(Position (x, y)).terrain = Terrain.MEADOW
+        return "Skácen les směrem " + direction.description
     }
 
     fun addItem (item: Item) {

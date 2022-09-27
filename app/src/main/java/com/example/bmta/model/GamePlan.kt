@@ -11,39 +11,46 @@ data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
         generateGamePlan()
     }
 
-    private fun generateGamePlan(){
-        // Borders
+    private fun generateGamePlan() {
+        generateBorder()
+        generateRiver()
+        repeat(numForrest) {
+            generateForrest()
+        }
+    }
+
+    private fun generateBorder() {
         for (i in 0 until height) {
             for (j in 0 until width) {
-                if (i == 0 || j == 0 || i == height -1 || j==width-1) {
-                    gamePlan[i][j]= GameField(Terrain.BORDER)
+                if (i == 0 || j == 0 || i == height - 1 || j == width - 1) {
+                    gamePlan[i][j] = GameField(Terrain.BORDER)
                 }
             }
         }
+    }
 
-        // River
+    private fun generateRiver() {
         val bridgePosition = generateRandomPosition()
-        for (i in 1..height - 2 ) {
-            gamePlan[i][bridgePosition.x]= GameField(Terrain.RIVER)
+        for (i in 1..height - 2) {
+            gamePlan[i][bridgePosition.x] = GameField(Terrain.RIVER)
         }
-        gamePlan[bridgePosition.y][bridgePosition.x]= GameField(Terrain.BRIDGE)
+        gamePlan[bridgePosition.y][bridgePosition.x] = GameField(Terrain.BRIDGE)
+    }
 
-        // forests
-        for (f in 1 .. numForrest) {
-            val forrestPosition = generateRandomPositionOnMeadow()
-            gamePlan[forrestPosition.y][forrestPosition.x].terrain = Terrain.FOREST
-            if (gamePlan[forrestPosition.y - 1][forrestPosition.x].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPosition.y - 1][forrestPosition.x].terrain = Terrain.FOREST
-            }
-            if (gamePlan[forrestPosition.y + 1][forrestPosition.x].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPosition.y + 1][forrestPosition.x].terrain = Terrain.FOREST
-            }
-            if (gamePlan[forrestPosition.y][forrestPosition.x - 1].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPosition.y][forrestPosition.x - 1].terrain = Terrain.FOREST
-            }
-            if (gamePlan[forrestPosition.y][forrestPosition.x + 1].terrain == Terrain.MEADOW) {
-                gamePlan[forrestPosition.y][forrestPosition.x + 1].terrain = Terrain.FOREST
-            }
+    private fun generateForrest() {
+        val forrestPosition = generateRandomPositionOnMeadow()
+        gamePlan[forrestPosition.y][forrestPosition.x].terrain = Terrain.FOREST
+        if (gamePlan[forrestPosition.y - 1][forrestPosition.x].terrain == Terrain.MEADOW) {
+            gamePlan[forrestPosition.y - 1][forrestPosition.x].terrain = Terrain.FOREST
+        }
+        if (gamePlan[forrestPosition.y + 1][forrestPosition.x].terrain == Terrain.MEADOW) {
+            gamePlan[forrestPosition.y + 1][forrestPosition.x].terrain = Terrain.FOREST
+        }
+        if (gamePlan[forrestPosition.y][forrestPosition.x - 1].terrain == Terrain.MEADOW) {
+            gamePlan[forrestPosition.y][forrestPosition.x - 1].terrain = Terrain.FOREST
+        }
+        if (gamePlan[forrestPosition.y][forrestPosition.x + 1].terrain == Terrain.MEADOW) {
+            gamePlan[forrestPosition.y][forrestPosition.x + 1].terrain = Terrain.FOREST
         }
     }
 
@@ -67,7 +74,7 @@ data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
         return randomPosition
     }
 
-    fun generateFreeRandomPositionOnMeadow(gameObjects: ArrayList<Any>) : Position {
+    fun generateFreeRandomPositionOnMeadow(gameObjects: ArrayList<GameObject>) : Position {
         var randomPosition : Position
         do {
             randomPosition = generateRandomPositionOnMeadow()
@@ -75,58 +82,29 @@ data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
         return randomPosition
     }
 
-    fun getTerrainOnGameField (position: Position) : Terrain {
-        return gamePlan[position.y][position.x].terrain
-    }
-
-    fun map() {
+    fun map(gameObjects: ArrayList<GameObject>) {
+        var printedObject: Boolean
         for (i in 0 until height) {
             for (j in 0 until width) {
-                print (gamePlan[i][j].terrain.terrainChar + " ")
-            }
-            println()
-        }
-    }
-
-    fun map(hero: Hero) {
-        for (i in 0 until height) {
-            for (j in 0 until width) {
-                if (hero.position.y == i && hero.position.x == j) {
-                    print ("H ")
-                } else {
-                    print(gamePlan[i][j].terrain.terrainChar + " ")
-                }
-            }
-            println()
-        }
-    }
-
-    fun map(gameObjects: ArrayList<Any>) {
-        var printedObject : Boolean
-        for (i in 0 until height) {
-            for (j in 0 until width) {
-                printedObject=false
+                printedObject = false
                 for (gameObject in gameObjects) {
-                    if (gameObject is GameObject) {
-                        if (gameObject.position == Position(j, i)) {
-                            if (gameObject is Hero) {
-                                print ("H ")
-                                printedObject = true
-                                break
-                            }  else if (gameObject is Enemy && ! gameObject.isDeath()) {
-                                print ("N ")
-                                printedObject = true
-                                break
-                            }  else if (gameObject is Item && ! gameObject.pickedUp) {
-                                print ("P ")
-                                printedObject = true
-                                break
-                            }
+                    if (gameObject.position == Position(j, i)) {
+                        if (gameObject is Hero) {
+                            print("H ")
+                            printedObject = true
+                            break
+                        } else if (gameObject is Enemy && !gameObject.isDeath()) {
+                            print("N ")
+                            printedObject = true
+                            break
+                        } else if (gameObject is Item && !gameObject.pickedUp) {
+                            print("P ")
+                            printedObject = true
+                            break
                         }
                     }
                 }
-
-                if (! printedObject) print(gamePlan[i][j].terrain.terrainChar + " ")
+                if (!printedObject) print(gamePlan[i][j].terrain.terrainChar + " ")
             }
             println()
         }

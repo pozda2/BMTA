@@ -86,12 +86,12 @@ class PlayGame : AppCompatActivity() {
                 command = "nop"
             }
         } else {
-            command = Newgame.game.gamePlan.getTerrainOnGameField(
+            command = Newgame.game.gamePlan.getGameField(
                 Position(
                     Newgame.game.hero.position.x + direction.relativeX,
                     Newgame.game.hero.position.y + direction.relativeY
                 )
-            ).command
+            ).terrain.command
             if (command.isEmpty() || command == "kacej")
                 command += direction.command
         }
@@ -206,7 +206,7 @@ class PlayGame : AppCompatActivity() {
             return item.imgResource
         }
 
-        return Newgame.game.gamePlan.getTerrainOnGameField(position).imgResource
+        return Newgame.game.gamePlan.getGameField(position).terrain.imgResource
     }
 
     private fun refreshStats () {
