@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.bmta.R
 import com.example.bmta.databinding.ActivityPlayGameBinding
 import com.example.bmta.model.*
 import com.example.bmta.view.ItemAdaper
@@ -16,13 +15,19 @@ import java.util.*
 
 class PlayGame : AppCompatActivity() {
     private lateinit var binding : ActivityPlayGameBinding
-
     private val logs = LinkedList(listOf(""))
+    private lateinit var game : Game
+    private var heroName : String = "hrdina"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (intent.extras != null) {
+            heroName = intent.extras!!.getString("heroName").toString()
+        }
+        game = Game (heroName)
 
         binding.imageNorth.setOnClickListener {
             runRound(Direction.NORTH)
@@ -63,7 +68,7 @@ class PlayGame : AppCompatActivity() {
         binding.logRecycler.layoutManager = LinearLayoutManager(this)
         binding.logRecycler.adapter = LogAdapter(logs)
         binding.itemsRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.itemsRecycler.adapter = ItemAdaper (Newgame.game.hero.items)
+        binding.itemsRecycler.adapter = ItemAdaper (game.hero.items)
 
         refreshStats()
         refreshGameFields()
@@ -72,35 +77,13 @@ class PlayGame : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun runRound (direction: Direction) {
         var message : String
-        var command : String
-        if (direction == Direction.NOMOVE) {
-            val enemy = Newgame.game.getEnemyOnGameField(Newgame.game.hero.position, Newgame.game.enemies)
-            val item = Newgame.game.getItemOnGameField (Newgame.game.hero.position, Newgame.game.items)
-            if (enemy is Enemy && ! enemy.isDeath()) {
-                command = enemy.command
-                Newgame.game.enemy=enemy
-            } else if (item is Item && ! item.pickedUp)  {
-                Newgame.game.item = item
-                command=item.command
-            } else {
-                command = "nop"
-            }
-        } else {
-            command = Newgame.game.gamePlan.getGameField(
-                Position(
-                    Newgame.game.hero.position.x + direction.relativeX,
-                    Newgame.game.hero.position.y + direction.relativeY
-                )
-            ).terrain.command
-            if (command.isEmpty() || command == "kacej")
-                command += direction.command
-        }
+        val command : String = game.getCommand(direction)
 
         if (command =="nop") {
             Toast.makeText(this, "Neplatný příkaz", Toast.LENGTH_SHORT).show()
             return
         } else {
-            message = Newgame.game.runCommand(command)
+            message = game.runCommand(command)
             if (message.isNotEmpty()) {
                 //Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 logs.push (message)
@@ -109,20 +92,20 @@ class PlayGame : AppCompatActivity() {
             binding.itemsRecycler.adapter?.notifyDataSetChanged()
         }
 
-        message=Newgame.game.enemyAttack()
+        message=game.enemyAttack()
         if (message.isNotEmpty()) {
             // Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             logs.push (message)
         }
 
-        Newgame.game.score++
+        game.heroHealing()
 
-        if (Newgame.game.hero.isDeath()) {
-                println ("Jsi mrtvý. Hra končí.")
+        message = game.gameFinish()
+        if (message.isNotEmpty()) {
                 AlertDialog.Builder(this)
                     .setCancelable(false)
                     .setTitle("Konec hry")
-                    .setMessage("Jsi mrtvý.")
+                    .setMessage(message)
                     .setPositiveButton("OK") { _, _ ->
                         startActivity(Intent(this, MainActivity::class.java))
                 }
@@ -130,92 +113,46 @@ class PlayGame : AppCompatActivity() {
                 .show()
         }
 
-        if (Newgame.game.allEnemiesDeath()) {
-            AlertDialog.Builder(this)
-                .setCancelable(false)
-                .setTitle("Konec hry")
-                .setMessage("Všichni nepřátelé jsou mrtví. Vyhrál jsi. Potřeboval jsi ${Newgame.game.score} tahů.")
-                .setPositiveButton("OK") { _, _ ->
-                    startActivity(Intent(this, MainActivity::class.java))
-                }
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show()
-        }
-
-        Newgame.game.heroHealing()
-
         refreshStats()
         refreshGameFields()
     }
 
     private fun refreshGameFields() {
-        binding.imageNorth.setImageResource(getImageResourceOnGameField (
-            Position(Newgame.game.hero.position.x + Direction.NORTH.relativeX,
-                     Newgame.game.hero.position.y + Direction.NORTH.relativeY)
-        ))
+        binding.imageNorth.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.NORTH)).imgResource)
 
-        binding.imageNorthEast.setImageResource(getImageResourceOnGameField (
-            Position(Newgame.game.hero.position.x + Direction.NORTHEAST.relativeX,
-                Newgame.game.hero.position.y + Direction.NORTHEAST.relativeY)
-        ))
+        binding.imageNorthEast.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.NORTHEAST)).imgResource)
 
-        binding.imageEast.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x + Direction.EAST.relativeX,
-                Newgame.game.hero.position.y + Direction.EAST.relativeY)
-        ))
+        binding.imageEast.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.EAST)).imgResource)
 
-        binding.imageSouthEast.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x + Direction.SOUTHEAST.relativeX,
-                Newgame.game.hero.position.y + Direction.SOUTHEAST.relativeY)
-        ))
+        binding.imageSouthEast.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.SOUTHEAST)).imgResource)
 
-        binding.imageSouth.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x + Direction.SOUTH.relativeX,
-                     Newgame.game.hero.position.y + Direction.SOUTH.relativeY)
-        ))
+        binding.imageSouth.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.SOUTH)).imgResource)
 
-        binding.imageSouthWest.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x + Direction.SOUTHWEST.relativeX,
-                Newgame.game.hero.position.y + Direction.SOUTHWEST.relativeY)
-        ))
+        binding.imageSouthWest.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.SOUTHWEST)).imgResource)
 
-        binding.imageWest.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x + Direction.WEST.relativeX,
-                     Newgame.game.hero.position.y + Direction.WEST.relativeY)
-        ))
-        binding.imageNorthWest.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x + Direction.NORTHWEST.relativeX,
-                Newgame.game.hero.position.y + Direction.NORTHWEST.relativeY)
-        ))
+        binding.imageWest.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.WEST)).imgResource)
 
-        binding.imageCenter.setImageResource(getImageResourceOnGameField(
-            Position(Newgame.game.hero.position.x,
-                Newgame.game.hero.position.y)
-        ))
-    }
+        binding.imageNorthWest.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.NORTHWEST)).imgResource)
 
-    private fun getImageResourceOnGameField (position: Position) : Int {
-        val enemy = Newgame.game.getEnemyOnGameField(position, Newgame.game.enemies)
-        val item = Newgame.game.getItemOnGameField(position, Newgame.game.items)
-
-        if (enemy is Enemy) {
-            if (enemy.isDeath()) return R.drawable.ic_rip
-            else if (enemy.name == "Skeleton") return R.drawable.ic_skeleton
-            else if (enemy.name == "Troll") return R.drawable.ic_troll
-        } else if (item is Item && ! item.pickedUp) {
-            return item.imgResource
-        }
-
-        return Newgame.game.gamePlan.getGameField(position).terrain.imgResource
+        binding.imageCenter.setImageResource(
+            Icons.valueOf(game.getObjectOnPosition(Direction.NOMOVE)).imgResource)
     }
 
     private fun refreshStats () {
-        binding.textHeroName.text = Newgame.game.heroName
-        binding.textScore.text = Newgame.game.score.toString()
-        binding.textHealth.text= "%.2f".format(Newgame.game.hero.health)
-        binding.textAttack.text= "%.2f".format(Newgame.game.hero.attack)
-        binding.textDefense.text= "%.2f".format(Newgame.game.hero.defense)
-        binding.textHealing.text= "%.2f".format(Newgame.game.hero.healing)
-        binding.textKills.text = Newgame.game.hero.kills.toString()
+        binding.textHeroName.text = game.heroName
+        binding.textScore.text = game.score.toString()
+        binding.textHealth.text= "%.2f".format(game.hero.health)
+        binding.textAttack.text= "%.2f".format(game.hero.attack)
+        binding.textDefense.text= "%.2f".format(game.hero.defense)
+        binding.textHealing.text= "%.2f".format(game.hero.healing)
+        binding.textKills.text = game.hero.kills.toString()
     }
 }
