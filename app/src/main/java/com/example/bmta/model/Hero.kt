@@ -1,15 +1,20 @@
 package com.example.bmta.model
 
-import java.util.*
-
 data class Hero(
     override var name: String = "Hrdina",
     override var position: Position,
-    override var command: String = "",
-    override var imgResource: Int
+    override var command: String = ""
     ) : Character() {
-
-
+    
+    override var health: Float = 100f
+        set(value) {
+            field = if (value > 100) {
+                100f
+            } else {
+                value
+            }
+        }
+    
     override var attack : Float = 1.2f
         get() {
             var a = field
@@ -72,8 +77,9 @@ data class Hero(
         return "Skácen les směrem " + direction.description
     }
 
-    fun addItem (item: Item) {
+    fun addItem (item: Item) : String {
         items.add(item)
         item.pickedUp=true
+        return "Sebrán ${item.name}"
     }
 }

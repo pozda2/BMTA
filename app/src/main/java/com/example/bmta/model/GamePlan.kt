@@ -2,10 +2,8 @@ package com.example.bmta.model
 
 import kotlin.random.Random
 
-data class GamePlan (val width: Int, val height: Int, val numForrest: Int) {
+data class GamePlan (val width: Int = 20, val height : Int = 10, val numForrest: Int = 4) {
     private var gamePlan = Array(height) { Array(width) { GameField(Terrain.MEADOW) } }
-
-    constructor() : this(20, 10, 4)
 
     init {
         generateGamePlan()
