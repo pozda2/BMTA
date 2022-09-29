@@ -8,5 +8,5 @@ data class Item (
     val attack: Float= 0.0F,
     val defense : Float= 0.0F,
     val healing : Float= 0.0F,
-    override var command: String,
-    override var imgResource: Int) : GameObject()
+    override var command: String = name.lowercase()
+) : GameObject()

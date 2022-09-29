@@ -6,6 +6,5 @@ data class Enemy(
     override var health: Float = 100.0F,
     override var attack: Float = 1.0F,
     override var defense: Float = 1.0F,
-    override var command: String,
-    override var imgResource: Int
+    override var command: String = "utok"
 ) : Character ()
