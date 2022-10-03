@@ -1,9 +1,19 @@
 package com.example.bmta.model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.bmta.database.Score
+import com.example.bmta.database.ScoreDao
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random
 
-class Game (val heroName:String ="Hrdina") : ViewModel() {
+class Game(
+    val heroName:String ="Hrdina",
+    val scoreDatabase: ScoreDao
+) : ViewModel() {
     private var width = 20
     private var height = 10
     private var numForests = 4
@@ -196,10 +206,15 @@ class Game (val heroName:String ="Hrdina") : ViewModel() {
 
     fun gameFinish(): String {
         if (hero.isDeath()) return "Jsi mrtvý."
-        if (allEnemiesDeath()) return "Všichni nepřátelé jsou mrtví. Vyhrál jsi. Potřeboval jsi $score tahů."
+        if (allEnemiesDeath()) {
+            Log.i("Konec", "konec")
+            GlobalScope.launch {
+                scoreDatabase.addScore(Score(Date(), hero.name, score))
+            }
+            return "Všichni nepřátelé jsou mrtví. Vyhrál jsi. Potřeboval jsi $score tahů."
+        }
         return ""
     }
-
 
     fun getCommand(direction: Direction) : String {
         var command : String

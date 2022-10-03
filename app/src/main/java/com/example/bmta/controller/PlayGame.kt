@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bmta.database.ScoreDatabase
 import com.example.bmta.databinding.ActivityPlayGameBinding
 import com.example.bmta.model.*
 import com.example.bmta.view.ItemAdaper
@@ -19,6 +20,7 @@ class PlayGame : AppCompatActivity() {
     private val logs = LinkedList(listOf(""))
     private lateinit var game : Game
     private var heroName : String = "hrdina"
+    private val scoreDatabase by lazy { ScoreDatabase.getDatabase(this).scoreDao() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +36,7 @@ class PlayGame : AppCompatActivity() {
 
         // Instanci hry si nechám vytvořit přes ViewModelProvider
         // Pro předání jména potřebuji factory
-        val factory = GameFactory(heroName)
+        val factory = GameFactory(heroName, scoreDatabase)
         game = ViewModelProvider(this, factory).get(Game::class.java)
 
         binding.imageNorth.setOnClickListener {
