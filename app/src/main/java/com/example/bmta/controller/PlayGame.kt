@@ -164,4 +164,3 @@ class PlayGame : AppCompatActivity() {
         binding.textKills.text = game.hero.kills.toString()
     }
 }
-
