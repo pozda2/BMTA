@@ -12,7 +12,7 @@ import kotlin.random.Random
 
 class Game(
     val heroName:String ="Hrdina",
-    val scoreDatabase: ScoreDao
+    val scoreDao: ScoreDao
 ) : ViewModel() {
     private var width = 20
     private var height = 10
@@ -209,7 +209,7 @@ class Game(
         if (allEnemiesDeath()) {
             Log.i("Konec", "konec")
             GlobalScope.launch {
-                scoreDatabase.addScore(Score(Date(), hero.name, score))
+                scoreDao.addScore(Score(0, Date(), hero.name, score))
             }
             return "Všichni nepřátelé jsou mrtví. Vyhrál jsi. Potřeboval jsi $score tahů."
         }

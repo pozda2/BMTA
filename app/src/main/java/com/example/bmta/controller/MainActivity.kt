@@ -23,11 +23,12 @@ class MainActivity : AppCompatActivity() {
             intent.addCategory(Intent.CATEGORY_HOME)
             startActivity(intent)
         }
+
+        binding.resultsBtn.setOnClickListener() {
+            startActivity(Intent(this, ScoreActivity::class.java))
+        }
     }
 }
 
-// recycle view
-// database
 // json soubory
-// MVVM
 // jetpack compose
