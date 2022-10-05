@@ -1,0 +1,71 @@
+{
+  "width": 20,
+  "height": 10,
+  "numforests": 4,
+  "hero" : {
+    "health": 150,
+    "attack": 1.2,
+    "defense": 1.2,
+    "healing" : 0.5
+    },
+  "enemies": [
+    {
+      "name": "Skeleton",
+      "health": 10,
+      "attack": 5,
+      "defense": 0.5,
+      "count": 4
+    },
+    {
+      "name": "Troll",
+      "health": 10,
+      "attack": 7,
+      "defense": 0.5,
+      "count": 1
+    }
+  ],
+  "items": [
+    {
+      "name": "Mec",
+      "health": 0,
+      "attack": 4,
+      "defense": 1,
+      "healing": 0
+    },
+    {
+      "name": "Dyka",
+      "health": 0,
+      "attack": 2,
+      "defense": 1,
+      "healing": 0
+    },
+    {
+      "name": "Stit",
+      "health": 0,
+      "attack": 0,
+      "defense": 2,
+      "healing": 0
+    },
+    {
+      "name": "Helma",
+      "health": 0,
+      "attack": 0,
+      "defense": 1,
+      "healing": 0
+    },
+    {
+      "name": "Brneni",
+      "health": 0,
+      "attack": 0,
+      "defense": 2,
+      "healing": 0
+    },
+    {
+      "name": "Lekarna",
+      "health": 0,
+      "attack": 0,
+      "defense": 0,
+      "healing": 1
+    }
+  ]
+}

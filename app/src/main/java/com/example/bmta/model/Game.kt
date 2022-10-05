@@ -6,125 +6,86 @@ import com.example.bmta.database.Score
 import com.example.bmta.database.ScoreDao
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 class Game(
-    val heroName:String ="Hrdina",
+    val heroName: String ="Hrdina",
+    settingsJson: String ="",
     val scoreDao: ScoreDao
 ) : ViewModel() {
-    private var width = 20
-    private var height = 10
-    private var numForests = 4
-    private var numEnemies = 5
+    private var settings = Settings(settingsJson)
     // private var possibleCommands = arrayListOf<String>()
     // private var command: String = ""
 
-    private var gamePlan = GamePlan(width, height, numForests)
+    private var gamePlan = GamePlan(settings.width, settings.height, settings.numForests)
+    lateinit var hero : Hero
     private var enemies = arrayListOf<GameObject>()
     private var items = arrayListOf<Item>()
     private var gameObjects = arrayListOf<GameObject>()
-
     var score = 0
-    var hero = Hero(name = heroName, position = gamePlan.generateRandomPositionOnMeadow())
 
     init {
-        gameObjects.add(hero)
-        generateEnemies()
-        generateItems()
+        generateHero(settings.hero, heroName)
+        generateEnemies(settings.enemies)
+        generateItems(settings.items)
     }
 
-    private fun generateEnemies() {
+    private fun generateHero(heroSettings: JSONObject?, heroName: String) {
+        if (heroSettings != null) {
+
+            hero = Hero (name = heroName,
+                     position = gamePlan.generateRandomPositionOnMeadow(),
+                     health = heroSettings.getDouble("health"),
+                     attack = heroSettings.getDouble("attack"),
+                     defense = heroSettings.getDouble("defense"),
+                     healing = heroSettings.getDouble("healing")
+            )
+        } else {
+            hero = Hero(name = heroName, position = gamePlan.generateRandomPositionOnMeadow())
+        }
+
+        gameObjects.add(hero)
+    }
+
+    private fun generateEnemies(enemies: JSONArray?) {
         var enemy : Enemy
-        repeat (numEnemies) {
-            enemy = generateEnemy()
-            enemies.add(enemy)
-            gameObjects.add(enemy)
+        enemies?.let {
+            for (i in 0 until enemies.length()) {
+                val enemyType = enemies.getJSONObject(i)
+                repeat (enemyType.getInt("count")) {
+                    enemy = Enemy(name = enemyType.getString("name"),
+                        position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
+                        health = enemyType.getDouble("health"),
+                        attack = enemyType.getDouble("attack"),
+                        defense = enemyType.getDouble("defense"),
+                    )
+                    this.enemies.add(enemy)
+                    gameObjects.add(enemy)
+                }
+            }
         }
     }
 
-    private fun generateEnemy(): Enemy {
-        return if (Random.nextInt(1, 10) < 8) Enemy(name="Skeleton",
-            position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-            health = 10.0F,
-            attack = 5.0F,
-            defense = 0.5F
-        ) else Enemy(name="Troll",
-            position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-            health = 10.0F,
-            attack = 5.0F,
-            defense = 0.5F,
-        )
-    }
-
-    private fun generateItems() {
-       var item = Item(
-           name ="Mec",
-           position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-           pickedUp = false,
-           health = 0.0f,
-           attack = 4.0f,
-           defense = 1.0f,
-           healing = 0.0f,
-       )
-        items.add(item)
-        gameObjects.add(item)
-        item = Item(
-            name = "Dyka",
-            position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-            pickedUp = false,
-            health = 0.0f,
-            attack = 2.0f,
-            defense = 1.0f,
-            healing = 0.0f
-        )
-        items.add(item)
-        gameObjects.add(item)
-        item = Item(
-            name = "Stit",
-            position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-            pickedUp = false,
-            health = 0.0f,
-            attack = 0.0f,
-            defense = 2.0f,
-            healing = 0.0f
-        )
-        items.add(item)
-        gameObjects.add(item)
-        item = Item(
-            name = "Helma",
-            position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-            pickedUp = false,
-            health = 0.0f,
-            attack = 0.0f,
-            defense = 1.0f,
-            healing = 0.0f
-        )
-        items.add(item)
-        gameObjects.add(item)
-        item=Item(
-            name= "Brneni",
-            position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-            pickedUp = false,
-            health = 0.0f,
-            attack = 0.0f,
-            defense = 3.0f,
-            healing = 0.0f
-        )
-        items.add(item)
-        gameObjects.add(item)
-        item = Item(
-            name = "Lekarna",
-            position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
-            pickedUp = false,
-            health = 0.0f,
-            attack = 0.0f,
-            defense = 2.0f,
-            healing = 1.0f
-        )
-        items.add(item)
-        gameObjects.add(item)
+    private fun generateItems(items: JSONArray?) {
+        var item : Item
+        items?.let {
+            for (i in 0 until items.length()) {
+                val itemType = items.getJSONObject(i)
+                item = Item(name = itemType.getString("name"),
+                        position = gamePlan.generateFreeRandomPositionOnMeadow(gameObjects),
+                        pickedUp = false,
+                        health = itemType.getDouble("health"),
+                        attack = itemType.getDouble("attack"),
+                        defense = itemType.getDouble("defense"),
+                        healing = itemType.getDouble("healing"),
+                    )
+                this.items.add(item)
+                gameObjects.add(item)
+            }
+        }
     }
 
     private fun getEnemyOnGameField (position: Position, gameObjects: ArrayList<GameObject>) : Enemy? {

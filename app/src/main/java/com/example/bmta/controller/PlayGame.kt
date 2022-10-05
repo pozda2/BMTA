@@ -8,11 +8,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bmta.R
 import com.example.bmta.database.ScoreDatabase
 import com.example.bmta.databinding.ActivityPlayGameBinding
 import com.example.bmta.model.*
 import com.example.bmta.view.ItemAdaper
 import com.example.bmta.view.LogAdapter
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.util.*
 
 class PlayGame : AppCompatActivity() {
@@ -31,12 +36,14 @@ class PlayGame : AppCompatActivity() {
             heroName = intent.extras!!.getString("heroName").toString()
         }
 
+        val settingsJson = readSettingsJson()
+
         // Když si budu delat instanci třídy po ručně, tak se při každém překlopení hra vytvoří znovu
         //game = Game(heroName)
 
         // Instanci hry si nechám vytvořit přes ViewModelProvider
         // Pro předání jména potřebuji factory
-        val factory = GameFactory(heroName, scoreDatabase)
+        val factory = GameFactory(heroName, settingsJson, scoreDatabase)
         game = ViewModelProvider(this, factory).get(Game::class.java)
 
         binding.imageNorth.setOnClickListener {
@@ -164,5 +171,23 @@ class PlayGame : AppCompatActivity() {
         binding.textDefense.text= "%.2f".format(game.hero.defense)
         binding.textHealing.text= "%.2f".format(game.hero.healing)
         binding.textKills.text = game.hero.kills.toString()
+    }
+
+    fun readSettingsJson () : String {
+        var string: String? = ""
+        val stringBuilder = StringBuilder()
+        val inputStream: InputStream = this.resources.openRawResource(R.raw.settings)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        while (true) {
+            try {
+                if (reader.readLine().also { string = it } == null) break
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            stringBuilder.append(string).append("\n")
+
+        }
+        inputStream.close()
+        return stringBuilder.toString()
     }
 }
