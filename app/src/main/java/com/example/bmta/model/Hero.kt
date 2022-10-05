@@ -3,33 +3,31 @@ package com.example.bmta.model
 data class Hero(
     override var name: String = "Hrdina",
     override var position: Position,
-    override var command: String = ""
+    override var command: String = "",
     ) : Character() {
-    
-    override var health: Float = 100f
-        set(value) {
-            field = if (value > 100) {
-                100f
-            } else {
-                value
-            }
-        }
-    
-    override var attack : Float = 1.2f
+
+    constructor(name: String, position: Position, command: String = "", health: Double, attack : Double, defense: Double, healing : Double) : this (name, position, command) {
+        this.health = health
+        this.attack = attack
+        this.defense = defense
+        this.healing = healing
+    }
+
+    override var attack : Double = 1.2
         get() {
             var a = field
             for (item in this.items) a += item.attack
 
             return a
         }
-    override var defense : Float = 1.2f
+    override var defense : Double = 1.2
         get() {
             var a = field
             for (item in this.items) a += item.defense
             return a
         }
 
-    var healing: Float = 0.5F
+    var healing: Double = 0.5
         get() {
             var a = field
             for (item in this.items) a += item.healing

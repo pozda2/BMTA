@@ -1,9 +1,9 @@
 package com.example.bmta.model
 
 abstract class Character : GameObject() {
-    open var health: Float = 100f
-    open var attack: Float = 1.2f
-    open var defense: Float = 1f
+    open var health: Double = 100.0
+    open var attack: Double = 1.2
+    open var defense: Double = 1.0
 
     fun isDeath (): Boolean {
         return (health < 0.00001)
@@ -11,7 +11,7 @@ abstract class Character : GameObject() {
 
     open fun attack (enemy: Character) : String {
         var realAttack = attack - enemy.defense
-        if (realAttack < 0) realAttack=0.0f
+        if (realAttack < 0) realAttack=0.0
         enemy.health = enemy.health - realAttack
 
         if (enemy.isDeath()) return "${enemy.name} je mrtvý."

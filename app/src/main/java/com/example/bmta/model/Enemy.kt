@@ -3,8 +3,8 @@ package com.example.bmta.model
 data class Enemy(
     override var name: String = "",
     override var position: Position,
-    override var health: Float = 100.0F,
-    override var attack: Float = 1.0F,
-    override var defense: Float = 1.0F,
+    override var health: Double = 100.0,
+    override var attack: Double = 1.0,
+    override var defense: Double = 1.0,
     override var command: String = "utok"
 ) : Character ()
